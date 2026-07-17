@@ -1,7 +1,6 @@
 package ir.maktabsharif.model;
 
-public class Book {
-    private int id;
+public class Book extends BaseModel<Integer> {
     private String title;
     private String author;
     private double price;
@@ -10,14 +9,6 @@ public class Book {
         this.title = title;
         this.author = author;
         this.price = price;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTitle() {
@@ -49,7 +40,7 @@ public class Book {
     public String toString() {
         return String.format(
                 "[ID: %d | Title: %s | Author: %s | Price: $%.2f]",
-                id, title, author, price
+                this.getId(),title, author, price
         );
     }
 }

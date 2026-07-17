@@ -37,7 +37,8 @@ public class Book {
     }
 
     public void setPrice(double price) {
-        this.price = price;
+        if (price < 0) throw new IllegalArgumentException();
+        else this.price = price;
     }
 
     @Override

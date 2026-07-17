@@ -6,15 +6,18 @@ import ir.maktabsharif.model.Book;
 import ir.maktabsharif.util.DatabaseConfig;
 
 import java.sql.*;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
-public class BookRepository {
+public class BookRepository implements BaseRepository<Integer, Book>{
 
-    public int create(Book book) {
+    @Override
+    public Integer create(Book book) {
         try (
                 Connection connection = DatabaseConfig.getConnection();
                 PreparedStatement ps = connection.prepareStatement("INSERT INTO books (title, author, price) VALUES (?, ?, ?)"
-                                                                    , Statement.RETURN_GENERATED_KEYS)
+                        , Statement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, book.getTitle());
             ps.setString(2, book.getAuthor());
@@ -30,11 +33,12 @@ public class BookRepository {
         }
     }
 
-    public Optional<Book> read(int id) throws BookNotFoundException {
+    @Override
+    public Optional<Book> read(Integer id) throws BookNotFoundException{
         try (Connection connection = DatabaseConfig.getConnection();
-            PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM books WHERE id = ?"
-            )
+             PreparedStatement ps = connection.prepareStatement(
+                     "SELECT * FROM books WHERE id = ?"
+             )
         ) {
             ps.setInt(1, id);
 
@@ -56,11 +60,40 @@ public class BookRepository {
         }
     }
 
+    @Override
     public Book update(Book book) {
         return null;
     }
 
-    public int delete(int id) {
+    @Override
+    public Integer delete(Integer integer) {
         return 0;
+    }
+
+    @Override
+    public Set<Book> findAll() {
+        try (Connection connection = DatabaseConfig.getConnection();
+            PreparedStatement ps = connection.prepareStatement(
+                    "SELECT * FROM books"
+            );
+            ResultSet rs = ps.executeQuery()
+        ) {
+            Set<Book> books = new HashSet<>();
+            while (rs.next()) {
+                Book book = new Book(
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDouble(4)
+                );
+                book.setId(rs.getInt(1));
+
+                books.add(book);
+            }
+
+            return books;
+        }
+        catch (SQLException e) {
+            throw new DatabaseQueryException("Find All from Database Failed: " + e.getMessage());
+        }
     }
 }

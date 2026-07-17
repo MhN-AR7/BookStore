@@ -9,6 +9,9 @@ public class User extends BaseModel<String> {
         this.password = password;
     }
 
+    public User() {
+    }
+
     public String getUsername() {
         return username;
     }

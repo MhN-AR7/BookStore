@@ -10,9 +10,10 @@ import java.sql.SQLException;
 public class BookRepository {
 
     public int create(Book book) {
-        Connection connection = DatabaseConfig.getConnection();
-
-        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO books (title, author, price) VALUES (?, ?, ?)")) {
+        try (
+                Connection connection = DatabaseConfig.getConnection();
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO books (title, author, price) VALUES (?, ?, ?)")
+        ) {
             ps.setString(1, book.getTitle());
             ps.setString(2, book.getAuthor());
             ps.setDouble(3, book.getPrice());

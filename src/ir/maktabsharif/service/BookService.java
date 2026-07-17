@@ -1,7 +1,10 @@
 package ir.maktabsharif.service;
 
+import ir.maktabsharif.exception.BookNotFoundException;
 import ir.maktabsharif.model.Book;
 import ir.maktabsharif.repository.BookRepository;
+
+import java.util.Optional;
 
 public class BookService {
     private final BookRepository bookRepository;
@@ -26,5 +29,15 @@ public class BookService {
         Book book = new Book(title, author, price);
         int generatedId = bookRepository.create(book);
         System.out.println("Book Created Successfully with ID: " + generatedId);
+    }
+
+    public Optional<Book> findById(int id) {
+        try {
+            return bookRepository.read(id);
+        }
+        catch (BookNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        return Optional.empty();
     }
 }

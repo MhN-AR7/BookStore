@@ -16,7 +16,7 @@ public class DatabaseConfig {
             return DriverManager.getConnection(URL, USERNAME, PASSWORD);
         }
         catch (SQLException e) {
-            throw new DatabaseConnectionException("Database Connection Failed!");
+            throw new DatabaseConnectionException("Database Connection Failed: ".concat(e.getMessage()));
         }
     }
 }
